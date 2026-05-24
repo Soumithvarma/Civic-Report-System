@@ -1,0 +1,16 @@
+{
+  "name": "smart-civic-issue-reporting-system",
+  "version": "1.0.0",
+  "description": "Smart Civic Issue Reporting System - MERN Stack Application",
+  "scripts": {
+    "install-server": "cd server && npm install",
+    "install-client": "cd client && npm install",
+    "install-all": "npm run install-server && npm run install-client",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "npm run server & npm run client"
+  },
+  "keywords": ["mern", "civic", "issue-reporting", "react", "node", "mongodb"],
+  "author": "Student Project",
+  "license": "MIT"
+}
