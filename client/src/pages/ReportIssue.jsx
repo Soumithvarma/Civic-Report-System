@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { issuesAPI } from '../api/api';
+import { toast } from 'react-toastify';                          // was missing before
+import { addNotification } from '../utils/notifications';
+      // ADD these two imports at the top
+
 
 function ReportIssue() {
   const navigate = useNavigate();
@@ -88,16 +92,31 @@ function ReportIssue() {
       // Call API to create issue
       const data = await issuesAPI.create(formData);
 
-      if (data.message === 'Issue submitted successfully') {
-        setSuccess('Issue reported successfully!');
 
-        // Reset form
-        setTimeout(() => {
-          navigate('/issues');
-        }, 1500);
-      } else {
-        setError(data.message || 'Failed to submit issue');
-      }
+
+// REPLACE the success block inside handleSubmit:
+if (data.message === 'Issue submitted successfully') {
+  // Notify the user who submitted
+  addNotification({
+    message: `Your issue "${title}" has been submitted successfully!`,
+    type: 'success',
+    userId: user.id,
+    forAdmin: false
+  });
+
+  // Notify admin
+  addNotification({
+    message: `New issue "${title}" reported at ${location}`,
+    type: 'info',
+    forAdmin: true
+  });
+
+  toast.success('Issue reported successfully');
+  setSuccess('Issue reported successfully!');
+  setTimeout(() => navigate('/issues'), 1500);
+} else {
+  setError(data.message || 'Failed to submit issue');
+}
     } catch (err) {
       setError('Unable to connect to server. Please try again.');
     } finally {
@@ -106,15 +125,63 @@ function ReportIssue() {
   };
 
   return (
+ 
+        <div className="relative min-h-screen bg-[#0B0F4D] overflow-hidden">
+
+    
+      {/* Background Glow */}
+      <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
+
+      <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Wave 1 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-20"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#CD9B3B"
+          d="M0,192L80,186C160,180,320,160,480,144C640,128,800,120,960,140C1120,160,1280,210,1440,220V320H0Z"
+        />
+      </svg>
+
+      {/* Wave 2 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-10"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#F4D58D"
+          d="M0,250L120,230C240,210,480,170,720,160C960,150,1200,190,1440,230V320H0Z"
+        />
+      </svg>
+
+      {/* Wave 3 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-5"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#FFFFFF"
+          d="M0,280L100,260C200,240,400,220,600,210C800,200,1000,220,1200,240C1300,250,1380,260,1440,270V320H0Z"
+        />
+      </svg>
+</div>
+ 
+
     <div className="max-w-3xl mx-auto">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl shadow-lg p-8 mb-8 text-white">
-        <h1 className="text-3xl font-bold mb-2">Report an Issue</h1>
-        <p className="text-green-100">Submit a civic complaint and help improve your community</p>
+      <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] border border-[#CD9B3B] rounded-xl shadow-lg p-8 mb-7 mt-3 text-white">
+        <h1 className="text-3xl text-[#CD9B3B] font-bold mb-2">Report an Issue</h1>
+        <p className="text-gray-300">Submit a civic complaint and help improve your community</p>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
+       <div className="bg-[#15184D]/ backdrop-blur-sm border border-[#CD9B3B] rounded-xl shadow-md">
+      <div className="bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-8">
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
@@ -132,14 +199,14 @@ function ReportIssue() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Issue Title */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-[#CD9B3B] font-medium mb-2">
               Issue Title <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              className="w-full px-4 text-gray-200 py-3 bg-[#15184D] border border-[#CD9B3B] rounded-lg focus:ring-2 focus:ring-[#CD9B3B] focus:border-transparent transition"
               placeholder="Brief title of the issue"
               required
             />
@@ -147,13 +214,13 @@ function ReportIssue() {
 
           {/* Description */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-[#CD9B3B] font-medium mb-2">
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition resize-none"
+              className="w-full px-4 py-3 bg-[#15184D] text-gray-200 border border-[#CD9B3B] rounded-lg focus:ring-2 focus:ring-[#CD9B3B]  transition resize-none"
               rows="5"
               placeholder="Describe the issue in detail..."
               required
@@ -162,13 +229,13 @@ function ReportIssue() {
 
           {/* Category */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-[#CD9B3B] font-medium mb-2">
               Category <span className="text-red-500">*</span>
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition bg-white"
+              className="w-full text-gray-200 px-4 py-3 bg-[#15184D] border border-[#CD9B3B] rounded-lg focus:ring-2 focus:ring-[#CD9B3B] focus:border-transparent transition"
               required
             >
               <option value="">Select a category</option>
@@ -180,14 +247,14 @@ function ReportIssue() {
 
           {/* Location */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-[#CD9B3B] font-medium mb-2">
               Location <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              className="w-full px-4 text-gray-200 py-3 bg-[#15184D] border border-[#CD9B3B] rounded-lg focus:ring-2 focus:ring-[#CD9B3B] focus:border-transparent transition"
               placeholder="Enter the location (e.g., Main Street, Sector 5)"
               required
             />
@@ -195,7 +262,7 @@ function ReportIssue() {
 
           {/* Image Upload */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-[#CD9B3B] font-medium mb-2">
               Upload Image (Optional)
             </label>
             <div className="mt-1">
@@ -208,7 +275,7 @@ function ReportIssue() {
               />
               <label
                 htmlFor="image-upload"
-                className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-500 transition"
+                className="flex items-center justify-center w-full h-32 border-2 border-dashed border-[#CD9B3B] rounded-lg cursor-pointer hover:border-[#CD9B3B] transition"
               >
                 {imagePreview ? (
                   <img
@@ -236,13 +303,15 @@ function ReportIssue() {
             className={`w-full py-3 px-4 rounded-lg text-white font-semibold transition ${
               loading
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700'
+                : 'bg-[#CD9B3B] hover:bg-[#B8860B]'
             }`}
           >
             {loading ? 'Submitting...' : 'Submit Issue'}
           </button>
         </form>
       </div>
+    </div>
+    </div>
     </div>
   );
 }

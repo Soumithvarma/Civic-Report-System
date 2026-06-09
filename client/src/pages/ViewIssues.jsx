@@ -1,6 +1,8 @@
 // View Issues Page - Display all complaints with filtering
 import React, { useState, useEffect } from 'react';
 import { issuesAPI } from '../api/api';
+import { toast } from 'react-toastify';                          // was missing before
+import { addNotification } from '../utils/notifications';
 
 function ViewIssues() {
   // State for issues and filters
@@ -33,20 +35,35 @@ function ViewIssues() {
   };
 
   // Handle issue status update (Admin only)
-  const handleStatusChange = async (issueId, newStatus) => {
-    try {
-      const data = await issuesAPI.updateStatus(issueId, newStatus);
-      if (data.message === 'Issue status updated') {
-        // Update local state
-        setIssues(issues.map(issue =>
-          issue._id === issueId ? { ...issue, status: newStatus } : issue
-        ));
-      }
-    } catch (error) {
-      console.error('Error updating status:', error);
-    }
-  };
+ const handleStatusChange = async (issueId, newStatus) => {
+  try {
+    const data = await issuesAPI.updateStatus(issueId, newStatus);
 
+    
+    if (data.message === 'Issue status updated') {
+  const updatedIssue = issues.find(issue => issue._id === issueId);
+
+  setIssues(issues.map(issue =>
+    issue._id === issueId ? { ...issue, status: newStatus } : issue
+  ));
+
+  // Notify the issue owner
+  addNotification({
+    message: `Your issue "${updatedIssue.title}" is now ${newStatus}`,
+    type: newStatus === 'Resolved' ? 'success' : 'warning',
+    userId: updatedIssue.userId?._id,
+    forAdmin: false
+  });
+
+  toast.success(`"${updatedIssue.title}" is now ${newStatus}`);
+}
+
+  } catch (error) {
+    console.error('Error updating status:', error);
+
+    toast.error('Failed to update issue status');
+  }
+};
   // Handle issue deletion (Admin only)
   const handleDelete = async (issueId) => {
     if (window.confirm('Are you sure you want to delete this issue?')) {
@@ -77,30 +94,74 @@ function ViewIssues() {
   const statuses = ['Pending', 'In Progress', 'Resolved'];
 
   return (
-    <div className="max-w-7xl mx-auto">
+ <div className="relative min-h-screen bg-[#0B0F4D] overflow-x-hidden">
+
+    
+      {/* Background Glow */}
+      <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
+
+      <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Wave 1 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-20"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#CD9B3B"
+          d="M0,192L80,186C160,180,320,160,480,144C640,128,800,120,960,140C1120,160,1280,210,1440,220V320H0Z"
+        />
+      </svg>
+
+      {/* Wave 2 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-10"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#F4D58D"
+          d="M0,250L120,230C240,210,480,170,720,160C960,150,1200,190,1440,230V320H0Z"
+        />
+      </svg>
+
+      {/* Wave 3 */}
+      <svg
+        className="absolute bottom-0 left-0 w-full opacity-5"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="#FFFFFF"
+          d="M0,280L100,260C200,240,400,220,600,210C800,200,1000,220,1200,240C1300,250,1380,260,1440,270V320H0Z"
+        />
+      </svg>
+</div>
+    <div className="relative min-h-screen max-w-7xl mx-auto mb-0">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-8 mb-8 text-white">
-        <h1 className="text-3xl font-bold mb-2">All Civic Issues</h1>
-        <p className="text-blue-100">
-          Browse and track reported issues in your community
+      <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] rounded-xl shadow-lg p-8 mb-8 mt-3 text-white border border-[#CD9B3B]">
+        <h1 className="text-3xl text-[#CD9B3B] font-bold mb-2">All Civic Issues</h1>
+        <p className="text-gray-300">
+        Browse, filter, and track reported issues in your community
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-        <div className="flex flex-wrap items-center gap-4">
+      <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] rounded-xl shadow-lg p-8 mb-8 mt-3 text-white border border-[#CD9B3B]">
+        <div className="flex flex-wrap items-center gap-5">
           <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
             </svg>
-            <span className="text-gray-700 font-medium">Filters:</span>
+            <span className="text-gray-300 font-medium">Filters:</span>
           </div>
 
           {/* Category Filter */}
           <select
             value={filters.category}
             onChange={(e) => handleFilterChange('category', e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            className="filter-select"
           >
             <option value="">All Categories</option>
             {categories.map(cat => (
@@ -112,7 +173,7 @@ function ViewIssues() {
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            className="filter-select"
           >
             <option value="">All Statuses</option>
             {statuses.map(status => (
@@ -136,20 +197,20 @@ function ViewIssues() {
       {loading ? (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Loading issues...</p>
+          <p className="mt-4 text-gray-300">Loading issues...</p>
         </div>
       ) : issues.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-md p-12 text-center">
+        <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] rounded-xl shadow-md p-12 text-center border border-[#CD9B3B]">
           <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p className="mt-4 text-gray-600 text-lg">No issues found</p>
-          <p className="text-gray-500">Try adjusting your filters or report a new issue</p>
+          <p className="mt-4 text-gray-300 text-lg">No issues found</p>
+          <p className="text-gray-300">Try adjusting your filters or report a new issue</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {issues.map(issue => (
-            <div key={issue._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+            <div key={issue._id} className=" border border-[#CD9B3B] bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
               {/* Issue Image */}
               {issue.image ? (
                 <img
@@ -158,7 +219,7 @@ function ViewIssues() {
                   className="w-full h-48 object-cover"
                 />
               ) : (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                <div className="w-full h-48 bg-gray-600 flex items-center justify-center">
                   <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -168,35 +229,35 @@ function ViewIssues() {
               {/* Issue Details */}
               <div className="p-6">
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{issue.title}</h3>
+                <h3 className="text-xl font-bold text-[#CD9B3B] mb-2">{issue.title}</h3>
 
                 {/* Category & Status Badges */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  <span className="px-2 py-1 bg-gray-100 rounded text-sm text-gray-700">
+                  <span className="px-2 py-1 bg-gray-300 rounded text-sm text-gray-800">
                     {issue.category}
                   </span>
                   <span className={`px-2 py-1 rounded text-sm font-medium ${
-                    issue.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                    issue.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                    'bg-green-100 text-green-800'
+                    issue.status === 'Pending' ? 'bg-red-300 text-red-800' :
+                    issue.status === 'In Progress' ? 'bg-yellow-300 text-yellow-800' :
+                    'bg-green-300 text-green-800'
                   }`}>
                     {issue.status}
                   </span>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-600 mb-4 line-clamp-3">{issue.description}</p>
+                <p className="text-gray-300 mb-4 line-clamp-3">{issue.description}</p>
 
                 {/* Location */}
                 <div className="flex items-start mb-3">
-                  <svg className="w-5 h-5 text-gray-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-gray-300 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-gray-600 text-sm">{issue.location}</span>
+                  <span className="text-gray-300 text-sm">{issue.location}</span>
                 </div>
 
                 {/* Reporter & Date */}
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div className="flex items-center justify-between text-sm text-gray-300 mb-4">
                   <span>Reported by: {issue.userId?.name || 'Unknown'}</span>
                   <span>{new Date(issue.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -232,6 +293,7 @@ function ViewIssues() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }
