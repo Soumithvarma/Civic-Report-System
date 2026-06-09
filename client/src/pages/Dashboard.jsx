@@ -1,11 +1,11 @@
-// Dashboard Page - Shows overview and statistics
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { issuesAPI } from '../api/api';
 import { toast } from 'react-toastify';
 
 function Dashboard() {
-  // State for issues data
+ 
   const [issues, setIssues] = useState([]);
   const [stats, setStats] = useState({
     total: 0,
@@ -15,21 +15,21 @@ function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Get user from localStorage
+
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  // Fetch issues when component mounts
+  
   useEffect(() => {
     fetchIssues();
   }, []);
 
-  // Fetch all issues and calculate statistics
+
   const fetchIssues = async () => {
     try {
       const data = await issuesAPI.getAll();
       setIssues(data);
 
-      // Calculate statistics
+      //statistics
       const total = data.length;
       const pending = data.filter(issue => issue.status === 'Pending').length;
       const inProgress = data.filter(issue => issue.status === 'In Progress').length;
@@ -43,21 +43,21 @@ function Dashboard() {
     }
   };
 
-  // Get recent issues (last 5)
+
   const recentIssues = issues.slice(0, 5);
 
-  // Get issues by the current user
+  
   const myIssues = issues.filter(issue => issue.userId?._id === user?.id);
 
   return (
     <div className="relative min-h-screen bg-[#0B0F4D] overflow-x-hidden">
    
-      {/* Background Glow */}
+     
       <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
       <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Wave 1 */}
+  
       <svg
         className="absolute bottom-0 left-0 w-full opacity-20"
         viewBox="0 0 1440 320"
@@ -69,7 +69,7 @@ function Dashboard() {
         />
       </svg>
 
-      {/* Wave 2 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-10"
         viewBox="0 0 1440 320"
@@ -81,7 +81,7 @@ function Dashboard() {
         />
       </svg>
 
-      {/* Wave 3 */}
+     
       <svg
         className="absolute bottom-0 left-0 w-full opacity-5"
         viewBox="0 0 1440 320"
@@ -96,7 +96,7 @@ function Dashboard() {
     <div className="relative min-h-screen max-w-7xl mx-auto mb-0 ">
          
       
-      {/* Welcome Banner */}
+  
       <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] rounded-xl shadow-lg p-8 mb-8 mt-3 text-white border border-[#CD9B3B]">
         <h1 className="text-3xl text-[#CD9B3B] font-bold mb-2">
           Welcome, {user?.name || 'User'}!
@@ -115,9 +115,9 @@ function Dashboard() {
         </div>
       ) : (
         <>
-          {/* Statistics Cards */}
+        
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            {/* Total Issues */}
+        
            
             <div className="group bg-gradient-to-r from-[#F0CD8B]/30 to-[#15184D] rounded-xl shadow-md p-6 border border-[#CD9B3B] hover:bg-blue-700 hover:border-blue-700 transition-all duration-500 hover:shadow-xl">
   <div className="flex items-center">
@@ -127,7 +127,7 @@ function Dashboard() {
         fill="currentColor"
         viewBox="0 0 20 20"
       >
-        {/* Your Total Issues icon path */}
+       
         <path fillRule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
       </svg>
     </div>
@@ -149,7 +149,7 @@ function Dashboard() {
         fill="currentColor"
         viewBox="0 0 20 20"
       >
-        {/* Your Pending icon path */}
+      
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.707 2.707a1 1 0 001.414-1.414L11 9.586V6z" clipRule="evenodd" />
       </svg>
     </div>
@@ -170,7 +170,7 @@ function Dashboard() {
         fill="currentColor"
         viewBox="0 0 20 20"
       >
-        {/* Your In Progress icon path */}
+     
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
       </svg>
     </div>
@@ -211,7 +211,7 @@ function Dashboard() {
 </div>
           </div>
 
-          {/* Quick Actions */}
+       
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Link
               to="/report"
@@ -296,7 +296,7 @@ function Dashboard() {
             )}
           </div>
 
-          {/* My Issues (for non-admin users) */}
+         
         
         </>
       )}

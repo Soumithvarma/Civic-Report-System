@@ -1,19 +1,19 @@
-// Report Issue Page - Submit new civic complaints
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { issuesAPI } from '../api/api';
-import { toast } from 'react-toastify';                          // was missing before
+import { toast } from 'react-toastify';                         
 import { addNotification } from '../utils/notifications';
-      // ADD these two imports at the top
+      
 
 
 function ReportIssue() {
   const navigate = useNavigate();
 
-  // Get user from localStorage
+
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  // State for form inputs
+  
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -24,7 +24,7 @@ function ReportIssue() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Category options
+  
   const categories = [
     'Road Damage',
     'Garbage',
@@ -34,17 +34,17 @@ function ReportIssue() {
     'Other'
   ];
 
-  // Handle image selection
+ 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
+      
       if (!file.type.startsWith('image/')) {
         setError('Please select an image file');
         return;
       }
 
-      // Validate file size (max 5MB)
+    
       if (file.size > 5 * 1024 * 1024) {
         setError('Image size should be less than 5MB');
         return;
@@ -52,7 +52,7 @@ function ReportIssue() {
 
       setImage(file);
 
-      // Create preview
+     
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -67,7 +67,7 @@ function ReportIssue() {
     setError('');
     setSuccess('');
 
-    // Validate form
+  
     if (!title || !description || !category || !location) {
       setError('Please fill in all required fields');
       return;
@@ -76,7 +76,7 @@ function ReportIssue() {
     setLoading(true);
 
     try {
-      // Create FormData for file upload
+
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
@@ -84,19 +84,19 @@ function ReportIssue() {
       formData.append('location', location);
       formData.append('userId', user.id);
 
-      // Append image if selected
+  
       if (image) {
         formData.append('image', image);
       }
 
-      // Call API to create issue
+      
       const data = await issuesAPI.create(formData);
 
 
 
-// REPLACE the success block inside handleSubmit:
+
 if (data.message === 'Issue submitted successfully') {
-  // Notify the user who submitted
+  
   addNotification({
     message: `Your issue "${title}" has been submitted successfully!`,
     type: 'success',
@@ -104,7 +104,7 @@ if (data.message === 'Issue submitted successfully') {
     forAdmin: false
   });
 
-  // Notify admin
+
   addNotification({
     message: `New issue "${title}" reported at ${location}`,
     type: 'info',
@@ -129,12 +129,12 @@ if (data.message === 'Issue submitted successfully') {
         <div className="relative min-h-screen bg-[#0B0F4D] overflow-hidden">
 
     
-      {/* Background Glow */}
+    
       <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
       <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Wave 1 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-20"
         viewBox="0 0 1440 320"
@@ -146,7 +146,7 @@ if (data.message === 'Issue submitted successfully') {
         />
       </svg>
 
-      {/* Wave 2 */}
+  
       <svg
         className="absolute bottom-0 left-0 w-full opacity-10"
         viewBox="0 0 1440 320"
@@ -158,7 +158,7 @@ if (data.message === 'Issue submitted successfully') {
         />
       </svg>
 
-      {/* Wave 3 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-5"
         viewBox="0 0 1440 320"
@@ -173,7 +173,7 @@ if (data.message === 'Issue submitted successfully') {
  
 
     <div className="max-w-3xl mx-auto">
-      {/* Page Header */}
+    
       <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] border border-[#CD9B3B] rounded-xl shadow-lg p-8 mb-7 mt-3 text-white">
         <h1 className="text-3xl text-[#CD9B3B] font-bold mb-2">Report an Issue</h1>
         <p className="text-gray-300">Submit a civic complaint and help improve your community</p>
@@ -182,14 +182,14 @@ if (data.message === 'Issue submitted successfully') {
       {/* Form Card */}
        <div className="bg-[#15184D]/ backdrop-blur-sm border border-[#CD9B3B] rounded-xl shadow-md">
       <div className="bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-8">
-        {/* Error Message */}
+      
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
             <p className="text-red-700">{error}</p>
           </div>
         )}
 
-        {/* Success Message */}
+    
         {success && (
           <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded">
             <p className="text-green-700">{success}</p>
@@ -197,7 +197,7 @@ if (data.message === 'Issue submitted successfully') {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Issue Title */}
+         
           <div>
             <label className="block text-[#CD9B3B] font-medium mb-2">
               Issue Title <span className="text-red-500">*</span>

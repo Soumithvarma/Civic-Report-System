@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// CORRECT
 import { getNotifications, markAsRead, markAllAsRead, deleteNotification, clearAll } from "../utils/notifications";
 function Notifications() {
   const user = JSON.parse(localStorage.getItem('user') || 'null');
@@ -72,7 +71,7 @@ function Notifications() {
           </div>
         </div>
 
-        {/* Action Buttons */}
+       
         {notifications.length > 0 && (
           <div className="flex gap-3 mb-4 justify-end">
             {unread > 0 && (
@@ -88,7 +87,7 @@ function Notifications() {
           </div>
         )}
 
-        {/* Notifications List */}
+
         {notifications.length === 0 ? (
           <div className="bg-gradient-to-r from-[#F0CD8B]/20 to-[#15184D] border border-[#CD9B3B] rounded-xl p-12 text-center">
             <svg className="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

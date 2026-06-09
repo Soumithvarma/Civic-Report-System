@@ -47,7 +47,7 @@ function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
+       
           <NavLink to="/dashboard" className="flex items-center space-x-2">
             <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -95,7 +95,7 @@ function Navbar() {
               )}
             </NavLink>
 
-            {/* Bell Icon — only when logged in */}
+            {/* Bell Icon*/}
             {user && (
               <div className="relative">
                 <NavLink to="/notifications" className="block p-1">
@@ -117,7 +117,7 @@ function Navbar() {
 
           </div>
 
-          {/* Desktop Logout */}
+         
           <div className="hidden md:flex items-center">
             <button
               onClick={handleLogout}
@@ -169,7 +169,7 @@ function Navbar() {
                 </NavLink>
               ))}
 
-              {/* Notifications — only when logged in */}
+        
               {user && (
                 <NavLink
                   to="/notifications"

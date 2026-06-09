@@ -1,11 +1,11 @@
-// View Issues Page - Display all complaints with filtering
+
 import React, { useState, useEffect } from 'react';
 import { issuesAPI } from '../api/api';
-import { toast } from 'react-toastify';                          // was missing before
+import { toast } from 'react-toastify';                      
 import { addNotification } from '../utils/notifications';
 
 function ViewIssues() {
-  // State for issues and filters
+ 
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -13,15 +13,15 @@ function ViewIssues() {
     status: ''
   });
 
-  // Get user from localStorage
+
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  // Fetch issues when component mounts or filters change
+  
   useEffect(() => {
     fetchIssues();
   }, [filters]);
 
-  // Fetch issues from API
+  
   const fetchIssues = async () => {
     setLoading(true);
     try {
@@ -34,7 +34,7 @@ function ViewIssues() {
     }
   };
 
-  // Handle issue status update (Admin only)
+ 
  const handleStatusChange = async (issueId, newStatus) => {
   try {
     const data = await issuesAPI.updateStatus(issueId, newStatus);
@@ -47,7 +47,7 @@ function ViewIssues() {
     issue._id === issueId ? { ...issue, status: newStatus } : issue
   ));
 
-  // Notify the issue owner
+  
   addNotification({
     message: `Your issue "${updatedIssue.title}" is now ${newStatus}`,
     type: newStatus === 'Resolved' ? 'success' : 'warning',
@@ -64,13 +64,13 @@ function ViewIssues() {
     toast.error('Failed to update issue status');
   }
 };
-  // Handle issue deletion (Admin only)
+
   const handleDelete = async (issueId) => {
     if (window.confirm('Are you sure you want to delete this issue?')) {
       try {
         const data = await issuesAPI.delete(issueId);
         if (data.message === 'Issue deleted successfully') {
-          // Remove from local state
+          
           setIssues(issues.filter(issue => issue._id !== issueId));
         }
       } catch (error) {
@@ -79,17 +79,17 @@ function ViewIssues() {
     }
   };
 
-  // Handle filter change
+  
   const handleFilterChange = (key, value) => {
     setFilters({ ...filters, [key]: value });
   };
 
-  // Clear all filters
+
   const clearFilters = () => {
     setFilters({ category: '', status: '' });
   };
 
-  // Category and status options
+
   const categories = ['Road Damage', 'Garbage', 'Water Leakage', 'Street Light', 'Drainage', 'Other'];
   const statuses = ['Pending', 'In Progress', 'Resolved'];
 
@@ -97,12 +97,12 @@ function ViewIssues() {
  <div className="relative min-h-screen bg-[#0B0F4D] overflow-x-hidden">
 
     
-      {/* Background Glow */}
+  
       <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
       <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Wave 1 */}
+    
       <svg
         className="absolute bottom-0 left-0 w-full opacity-20"
         viewBox="0 0 1440 320"
@@ -114,7 +114,7 @@ function ViewIssues() {
         />
       </svg>
 
-      {/* Wave 2 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-10"
         viewBox="0 0 1440 320"
@@ -126,7 +126,7 @@ function ViewIssues() {
         />
       </svg>
 
-      {/* Wave 3 */}
+     
       <svg
         className="absolute bottom-0 left-0 w-full opacity-5"
         viewBox="0 0 1440 320"

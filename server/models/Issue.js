@@ -1,11 +1,11 @@
-// Issue Model - Stores civic issue complaints
+// Issue Model
 const mongoose = require('mongoose');
 
-// Define the structure for issue documents
+
 const issueSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true, // Title is mandatory
+    required: true, 
     trim: true
   },
   description: {
@@ -23,17 +23,17 @@ const issueSchema = new mongoose.Schema({
     trim: true
   },
   image: {
-    type: String, // Stores the image file path
-    default: '' // Optional field
+    type: String, 
+    default: '' 
   },
   status: {
     type: String,
     enum: ['Pending', 'In Progress', 'Resolved'],
-    default: 'Pending' // New issues start as Pending
+    default: 'Pending' 
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // References the User model
+    ref: 'User', 
     required: true
   },
   createdAt: {
@@ -42,5 +42,5 @@ const issueSchema = new mongoose.Schema({
   }
 });
 
-// Create and export the Issue model
+
 module.exports = mongoose.model('Issue', issueSchema);

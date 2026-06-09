@@ -1,10 +1,9 @@
-// API Configuration
-// Base URL for the backend server
-const API_BASE_URL = 'http://localhost:5001/api';
 
-// Authentication API calls
+const API_BASE_URL = 'https://civic-report-system-2.onrender.com/api';
+
+
 export const authAPI = {
-  // Signup - Create new user account
+  // Signup 
   signup: async (name, email, password) => {
     const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
@@ -14,7 +13,7 @@ export const authAPI = {
     return response.json();
   },
 
-  // Login - Authenticate user
+  // Login
   login: async (email, password) => {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
@@ -27,9 +26,9 @@ export const authAPI = {
 
 // Issues API calls
 export const issuesAPI = {
-  // Get all issues (with optional filters)
+ 
   getAll: async (filters = {}) => {
-    // Build query string from filters
+    
     const params = new URLSearchParams();
     if (filters.category) params.append('category', filters.category);
     if (filters.status) params.append('status', filters.status);
@@ -47,7 +46,7 @@ export const issuesAPI = {
     return response.json();
   },
 
-  // Create new issue
+  // Create 
   create: async (formData) => {
     const response = await fetch(`${API_BASE_URL}/issues`, {
       method: 'POST',
@@ -56,7 +55,7 @@ export const issuesAPI = {
     return response.json();
   },
 
-  // Update issue status
+  // Update
   updateStatus: async (id, status) => {
     const response = await fetch(`${API_BASE_URL}/issues/${id}`, {
       method: 'PUT',
@@ -66,7 +65,7 @@ export const issuesAPI = {
     return response.json();
   },
 
-  // Delete issue
+  // Delete 
   delete: async (id) => {
     const response = await fetch(`${API_BASE_URL}/issues/${id}`, {
       method: 'DELETE'

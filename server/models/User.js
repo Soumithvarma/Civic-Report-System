@@ -1,19 +1,19 @@
-// User Model - Stores user information
+// User Model 
 const mongoose = require('mongoose');
 
-// Define the structure for user documents
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true, // Name is mandatory
-    trim: true // Removes extra spaces
+    required: true, 
+    trim: true 
   },
   email: {
     type: String,
     required: true,
-    unique: true, // Each email must be unique
+    unique: true, 
     trim: true,
-    lowercase: true // Converts email to lowercase
+    lowercase: true 
   },
   password: {
     type: String,
@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now // Automatically sets current date
+    default: Date.now 
   }
 });
 
-// Create and export the User model
+
 module.exports = mongoose.model('User', userSchema);

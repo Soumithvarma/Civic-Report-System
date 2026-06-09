@@ -34,10 +34,10 @@ function App() {
   return (
     <div className="min-h-screen w-full">
 
-      {/* Navbar */}
+   
       <Navbar />
 
-      {/* Main Content */}
+  
       <main className="mx-auto">
         <Routes>
 
@@ -81,7 +81,7 @@ function App() {
             }
           />
 
-          {/* Root Route */}
+       
           <Route
             path="/"
             element={

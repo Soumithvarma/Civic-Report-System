@@ -1,4 +1,4 @@
-// Signup Page - Create new user account
+// Signup
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../api/api';
@@ -9,7 +9,7 @@ import { VscErrorSmall } from "react-icons/vsc";
 function Signup() {
   const navigate = useNavigate();
 
-  // State for form inputs
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +22,7 @@ function Signup() {
     e.preventDefault();
     setError('');
 
-    // Basic validation
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -36,11 +36,11 @@ function Signup() {
     setLoading(true);
 
     try {
-      // Call signup API
+     
       const data = await authAPI.signup(name, email, password);
 
       if (data.message === 'User created successfully') {
-        // Redirect to login page
+     
         alert('Account created successfully! Please login.');
         navigate('/login');
       } else {
@@ -55,12 +55,12 @@ function Signup() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#0E103D] overflow-hidden">
-      {/* Background Glow */}
+    
       <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
       <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
-      {/* Wave 1 */}
+
       <svg
         className="absolute bottom-0 left-0 right-0 w-full opacity-20"
         viewBox="0 0 1440 320"
@@ -72,7 +72,7 @@ function Signup() {
         />
       </svg>
 
-      {/* Wave 2 */}
+
       <svg
         className="absolute bottom-0 left-0 right-0 w-full opacity-10"
         viewBox="0 0 1440 320"
@@ -84,7 +84,7 @@ function Signup() {
         />
       </svg>
 
-      {/* Wave 3 */}
+  
       <svg
         className="absolute bottom-0 left-0 w-full opacity-5"
         viewBox="0 0 1440 320"
@@ -115,7 +115,7 @@ function Signup() {
           <FaPen className="text-[#CD9B3B] text-3xl" />
           </div>
 
-          {/* Error Message */}
+
           {error && (
           <div className="bg-red-500/30 border border-red-500 text-white p-3 rounded-lg mb-2">
                         <VscErrorSmall className="inline mr-2 h-7 w-7" />

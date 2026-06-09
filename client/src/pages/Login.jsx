@@ -38,12 +38,12 @@ function Login() {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#0E103D] overflow-hidden">
 
-      {/* Background Glow */}
+      
       <div className="absolute top-[-120px] right-[-200px] w-96 h-96 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
       <div className="absolute bottom-0 left-[-110px] w-72 h-72 rounded-full bg-[#CD9B3B]/10 blur-3xl"></div>
 
-      {/* Wave 1 */}
+    
       <svg
         className="absolute bottom-0 left-0 w-full opacity-20"
         viewBox="0 0 1440 320"
@@ -55,7 +55,7 @@ function Login() {
         />
       </svg>
 
-      {/* Wave 2 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-10"
         viewBox="0 0 1440 320"
@@ -67,7 +67,7 @@ function Login() {
         />
       </svg>
 
-      {/* Wave 3 */}
+      
       <svg
         className="absolute bottom-0 left-0 w-full opacity-5"
         viewBox="0 0 1440 320"
@@ -79,7 +79,7 @@ function Login() {
         />
       </svg>
 
-      {/* Content */}
+     
       <div className="relative z-10 max-w-md w-full px-4">
 
         {/* Header */}

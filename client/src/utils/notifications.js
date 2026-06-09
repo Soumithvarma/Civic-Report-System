@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'civic_notifications';
 
-// Dispatch event so Navbar badge updates instantly
+
 const dispatchUpdate = () => {
   window.dispatchEvent(new Event('notificationsUpdated'));
 };
