@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const Issue = require('../models/Issue');
 const User = require('../models/User');
+const upload = require('../upload');
 
 
 const storage = multer.diskStorage({
@@ -96,7 +97,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       description,
       category,
       location,
-      image: req.file ? `/uploads/${req.file.filename}` : '',
+      image: req.file ? req.file.path : '',
       userId
     });
 
