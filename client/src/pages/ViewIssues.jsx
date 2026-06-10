@@ -214,7 +214,7 @@ function ViewIssues() {
               {/* Issue Image */}
               {issue.image ? (
                 <img
-                  src={`http://localhost:5001${issue.image}`}
+                  src={`https://civic-report-system-2.onrender.com${issue.image}`}
                   alt={issue.title}
                   className="w-full h-48 object-cover"
                 />
